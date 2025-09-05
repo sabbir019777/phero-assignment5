@@ -1,0 +1,47 @@
+/* style.css */
+
+.gradient-bg {
+    background: linear-gradient(to bottom, rgba(1, 50, 35, 1), rgba(0, 103, 71, 1));
+}
+.heart-filled {
+    color: red;
+}
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 2px;
+    padding: 15px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateX(400px);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+}
+.notification.show {
+    transform: translateX(0);
+}
+.police-call-btn {
+    border: 1px solid black;
+}
+.main-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+@media (max-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px){
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
