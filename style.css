@@ -125,7 +125,7 @@
     object-fit: cover;
 }
 
-/* Heart icon section*/
+/* Heart icon */
 
 .heart-icon {
     color: gray;
@@ -145,7 +145,7 @@ h4 {
 }
 
 p {
-    color: #4b5563; 
+    color: white; 
     margin-bottom: 1rem;
 }
 
