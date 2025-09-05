@@ -1,4 +1,4 @@
-/* style.css */
+                            /* style.css */
 
 .gradient-bg {
     background: linear-gradient(to bottom, rgba(1, 50, 35, 1), rgba(0, 103, 71, 1));
@@ -42,9 +42,8 @@
     color: red;
 }
 
+                      /* Hero Section */
 
-
-                /* Hero Section */
 .hero {
   height: 100vh;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
@@ -97,6 +96,7 @@
 }
 
 /* Each card */
+
 .card-grid > div {
     background-color: white;
     border-radius: 1rem; 
@@ -294,11 +294,3 @@ p {
     font-size: 14px;
     color: #6b7280;
 }
-
-
-
-
-
-
-
-
