@@ -335,9 +335,336 @@
     </button>
     <button class="call-btn flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2" data-name="Bangladesh Railway" data-bangla-name="বাংলাদেশ রেলওয়ে" data-number="163">
       <i class="fas fa-phone"></i> <span>Call</span>
-    </button>
-  </div>
+ </button>
 </div>
+</div>
+
+          <!-- call history box section -->
+
+<div class="call-history-box">
+ <div class="call-history-header">
+<h3 class="call-history-title">
+  <i class="fas fa-history call-history-icon"></i>Call History  </h3>
+   <button id="clearHistory" class="clear-btn"><span>Clear</span>
+  </button>
+</div>
+ <div id="callHistory" class="call-history-container">
+ </div>
+</div>
+
+
+
+
+                <!-- js function -->
+
+<script>
+
+    //  Initialize c user interactions
+
+    let likesCounter = 0;
+    let coinBalance = 100;
+    let copyTracker = 0;
+    let callLog = [];
+
+    // DOM elements
+
+    const likesDisplay = document.getElementById('heartCount');
+    const coinsDisplay = document.getElementById('coinCount');
+    const copiesDisplay = document.getElementById('copyCount');
+    const heartNavIcon = document.getElementById('navHeartIcon');
+    const coinNavIcon = document.getElementById('navCoinIcon');
+    const callLogContainer = document.getElementById('callHistory');
+    const clearLogBtn = document.getElementById('clearHistory');
+    const notifyBox = document.getElementById('notification');
+
+    //  temporary notifications 
+
+    function displayNotice(message, duration = 3000) {
+        notifyBox.innerText = message;
+    notifyBox.classList.add('show');
+        
+        // Hide notification 
+
+   setTimeout(function() {
+      notifyBox.classList.remove('show');
+   }, duration);
+  }
+
+    //  heart button clicks
+
+ document.querySelectorAll('.heart-btn').forEach(function(btn) {
+     btn.addEventListener('click', function() {
+  const heart = this.querySelector('i');
+     console.log('Clicked heart button! Current state:', heart.classList);
+
+            // Toggle heart icon
+
+ if (heart.classList.contains('fas')) {
+     heart.classList.remove('fas');
+         heart.classList.add('far');
+  heart.classList.remove('filled');
+      likesCounter--;
+    console.log('Unliked! New count:', likesCounter);
+    } 
+else {
+     heart.classList.add('fas');
+    heart.classList.remove('far');
+   heart.classList.add('filled');
+         likesCounter++;
+ console.log('Liked! New count:', likesCounter);
+ }
+
+            // Ensure likes 
+
+ if (likesCounter < 0) {
+           likesCounter = 0;
+   }
+  likesDisplay.textContent = likesCounter;
+   });
+   });
+
+    //  copy button clicks
+
+ document.querySelectorAll('.copy-btn').forEach(function(btn) {
+     btn.addEventListener('click', function() {
+  const phoneNumber = btn.getAttribute('data-number');
+            
+            // Create temporary 
+
+const tempInput = document.createElement('textarea');
+    tempInput.value = phoneNumber;
+  document.body.appendChild(tempInput);
+     tempInput.select();
+            
+  try {
+     document.execCommand('copy');
+          copyTracker++;
+    copiesDisplay.textContent = copyTracker;
+        alert(`Copied number: ${phoneNumber}`);
+                
+            // Provide visual feedback
+
+ const originalContent = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      btn.classList.add('bg-green-200');
+                
+    setTimeout(function() {
+            btn.innerHTML = originalContent;
+           btn.classList.remove('bg-green-200');
+    }, 2000);
+      }
+       catch (error) {
+    console.error('Copy failed:', error);
+     alert('Oops, couldn’t copy the number!');
+  }
+            
+ document.body.removeChild(tempInput);
+    });
+    });
+
+    // Handle call button clicks
+
+ document.querySelectorAll('.call-btn').forEach(function(btn) {
+       btn.addEventListener('click', function() {
+   const nameEnglish = btn.getAttribute('data-name');
+ const nameBangla = btn.getAttribute('data-bangla-name');
+   const phoneNumber = btn.getAttribute('data-number');
+
+            //  enough coins
+
+ if (coinBalance < 20) {
+     alert('You need 20 coins to make a call!');
+           return;
+  }
+
+ coinBalance -= 20;
+  coinsDisplay.textContent = coinBalance;
+     alert(`Dialing ${nameBangla} at ${phoneNumber}`);
+
+            //  call with timestam
+
+const currentTime = new Date().toLocaleTimeString();
+    logCall(nameBangla, phoneNumber, currentTime);
+  });
+    });
+
+    // calls and  history
+
+ function logCall(name, number, time) {
+    const callEntry = {
+   contactName: name,
+  contactNumber: number,
+    callTime: time
+        };
+  callLog.push(callEntry);
+
+        // 6 calls
+
+if (callLog.length > 6) {
+            callLog.shift();
+  }
+
+        //  localstorage
+
+   localStorage.setItem('callLog', JSON.stringify(callLog));
+        refreshCallLog();
+    }
+
+    //  call history
+
+ function refreshCallLog() {
+      callLogContainer.innerHTML = '';
+ if (callLog.length === 0) {
+    callLogContainer.innerHTML = '<p></p>';
+     return;
+ }
+   callLog.forEach(function(item) {
+    const entryDiv = document.createElement('div');
+      entryDiv.className = 'history-item';
+            entryDiv.innerHTML = `
+  <div class="history-item-content">
+    <h4 class="font-bold">${item.contactName}</h4>
+     <p class="history-item-number">${item.contactNumber}</p>
+   </div>
+       <div class="history-item-time">${item.callTime}</div>
+         `;
+     callLogContainer.appendChild(entryDiv);
+  });
+    }
+
+    // Clear call history
+
+    clearLogBtn.addEventListener('click', function() {
+     callLog = [];
+   localStorage.removeItem('callLog');
+    refreshCallLog();
+  alert('Call history cleared!');
+    });
+
+    // Handle heart icon 
+
+    document.getElementById('heart-upload').addEventListener('change', function(event) {
+     const selectedFile = event.target.files[0];
+    if (selectedFile) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+   heartNavIcon.src = e.target.result;
+            localStorage.setItem('customHeartIcon', e.target.result);
+         displayNotice('Heart icon changed!');
+    };
+     reader.readAsDataURL(selectedFile);
+ }
+   });
+
+    // Handle coin icon 
+
+    document.getElementById('coin-upload').addEventListener('change', function(event) {
+      const selectedFile = event.target.files[0];
+   if (selectedFile) {
+ const reader = new FileReader();
+     reader.onload = function(e) {
+          coinNavIcon.src = e.target.result;
+       localStorage.setItem('customCoinIcon', e.target.result);
+        displayNotice('Coin icon changed!');
+  };
+    reader.readAsDataURL(selectedFile);
+    }
+ });
+
+    // Clickable heart icon 
+
+   heartNavIcon.addEventListener('click', function() {
+  const fileInput = document.createElement('input');
+ fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+
+  fileInput.addEventListener('change', function(event) {
+   const selectedFile = event.target.files[0];
+   if (selectedFile) {
+  const reader = new FileReader();
+        reader.onload = function(e) {
+     heartNavIcon.src = e.target.result;
+         localStorage.setItem('customHeartIcon', e.target.result);
+       displayNotice('Heart icon updated!');
+     };
+      reader.readAsDataURL(selectedFile);
+  }
+ });
+
+ document.body.appendChild(fileInput);
+ fileInput.click();
+    document.body.removeChild(fileInput);
+    });
+
+    // Clickable coin
+
+ coinNavIcon.addEventListener('click', function() {
+  const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+     fileInput.style.display = 'none';
+
+    fileInput.addEventListener('change', function(event) {
+      const selectedFile = event.target.files[0];
+    if (selectedFile) {
+ const reader = new FileReader();
+         reader.onload = function(e) {
+        coinNavIcon.src = e.target.result;
+          localStorage.setItem('customCoinIcon', e.target.result);
+          displayNotice('Coin icon updated!');
+ };
+        reader.readAsDataURL(selectedFile);
+     }
+    });
+
+  document.body.appendChild(fileInput);
+     fileInput.click();
+    document.body.removeChild(fileInput);
+  });
+
+    // Load saved data 
+
+    window.addEventListener('DOMContentLoaded', function() {
+
+        // Restore heart icon
+
+ const savedHeart = localStorage.getItem('customHeartIcon');
+   if (savedHeart) {
+       heartNavIcon.src = savedHeart;
+   }
+
+        // Restore coin icon
+
+  const savedCoin = localStorage.getItem('customCoinIcon');
+     if (savedCoin) {
+        coinNavIcon.src = savedCoin;
+  }
+
+        // Restore call history
+
+ const savedLog = localStorage.getItem('callLog');
+ if (savedLog) {
+   callLog = JSON.parse(savedLog);
+ refreshCallLog();
+   }
+
+        // Restore service icons 
+
+ for (let i = 1; i <= 9; i++) {
+   const savedIcon = localStorage.getItem(`service-icon-${i}`);
+       if (savedIcon) {
+   const icon = document.getElementById(`service-icon-${i}`);
+  if (icon) {
+       icon.src = savedIcon;
+}
+  }
+ }
+});
+</script>
+
+
+
 
   </div>
   </main>
