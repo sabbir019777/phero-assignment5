@@ -294,3 +294,101 @@ p {
     font-size: 14px;
     color: #6b7280;
 }
+
+
+                   /*Mobile responsive  */
+
+@media (max-width: 640px) {
+
+  /* Navbar */
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  nav h1 {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+
+  .nav-icon-box, .coin-box, .copy-box {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  /* Hero section */
+
+  .gradient-bg h2 {
+    font-size: 2rem;
+  }
+
+  .gradient-bg p {
+    font-size: 0.875rem;
+    padding: 0 10px;
+  }
+
+  .gradient-bg img {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* Main section */
+
+  .main-container .flex {
+    flex-direction: column;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr; 
+    gap: 16px;
+  }
+
+  .card-grid > div {
+    padding: 1rem;
+  }
+
+  /* Card icons */
+
+  .icon-container, .service-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Card text */
+
+  h4 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.875rem;
+  }
+  .number-text {
+    font-size: 1.5rem;
+  }
+  .universal-tag {
+    font-size: 0.75rem;
+    height: 28px;
+    padding: 0 12px;
+  }
+
+  /* Buttons */
+
+  .copy-btn, .call-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+    gap: 4px;
+  }
+
+  /*  call history  */
+
+  .call-history-box {
+    position: relative !important;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+}
